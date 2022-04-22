@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -48,13 +49,13 @@ class MainControllerTest {
 
     @Test
     void hello_Test() throws Exception{
-        when(mainService.hello(any()))
+        when(mainService.hello())
                 .thenReturn(ResponseUtil.build("Hello World", null, HttpStatus.OK));
-        this.mockMvc.perform(post("/hello")
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/hello")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content("{}"))
-
+                .andExpect(status().isOk())
                 .andReturn();
     }
 
