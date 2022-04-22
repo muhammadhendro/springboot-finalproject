@@ -30,7 +30,7 @@ jobs:
           file: unit-test.dockerfile
           context: .
           push: true
-          tags: piinalpin/springboot-finalproject-coverage:latest
+          tags: hendrojun/springboot-finalproject-coverage:latest
   build:
     name: Build
     runs-on: ubuntu-18.04
@@ -55,7 +55,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: piinalpin/springboot-finalproject:latest
+          tags: hendrojun/springboot-finalproject:latest
   deployment:
     name: Deploy container using SSH
     runs-on: ubuntu-18.04
@@ -81,8 +81,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             docker stop springboot-helloworld springboot-helloworld-coverage
-            docker rmi piinalpin/springboot-finalproject:latest piinalpin/springboot-finalproject-coverage:latest
-            docker pull piinalpin/springboot-finalproject:latest
-            docker pull piinalpin/springboot-finalproject-coverage:latest
-            docker run -d --rm --name springboot-finalproject-coverage -p 8000:80 piinalpin/springboot-finalproject-coverage:latest
-            docker run -d --rm --name springboot-finalproject -p 80:8080 --env-file=.dev.env --network kampus_merdeka piinalpin/springboot-finalproject:latest
+            docker rmi hendrojun/springboot-finalproject:latest hendrojun/springboot-finalproject-coverage:latest
+            docker pull hendrojun/springboot-finalproject:latest
+            docker pull hendrojun/springboot-finalproject-coverage:latest
+            docker run -d --rm --name springboot-finalproject-coverage -p 8000:80 hendrojun/springboot-finalproject-coverage:latest
+            docker run -d --rm --name springboot-finalproject -p 80:8080 --env-file=.dev.env --network kampus_merdeka hendrojun/springboot-finalproject:latest
