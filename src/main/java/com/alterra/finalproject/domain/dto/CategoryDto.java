@@ -3,6 +3,7 @@ package com.alterra.finalproject.domain.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +24,6 @@ public class CategoryDto implements Serializable {
 
     private Long id;
 
+    @ApiModelProperty(notes = "Category name", example = "Komik")
     private String categoryName;
 }
