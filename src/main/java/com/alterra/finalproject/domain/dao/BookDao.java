@@ -1,6 +1,7 @@
 package com.alterra.finalproject.domain.dao;
 
 import com.alterra.finalproject.domain.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Data
@@ -36,11 +38,8 @@ public class BookDao extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-
-
     @Column(name = "description", nullable = false)
     private String description;
-
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -56,8 +55,9 @@ public class BookDao extends BaseEntity {
     @Column(name = "price", nullable = false)
     private Integer price;
 
-
-
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
+    private List<ReviewDao> reviews;
 
 
 

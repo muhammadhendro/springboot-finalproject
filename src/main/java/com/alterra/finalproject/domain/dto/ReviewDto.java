@@ -22,9 +22,11 @@ public class ReviewDto implements Serializable {
 
     private static final long serialVersionUID = 2530147447600703396L;
 
-    private Integer customerId;
+    private Long id;
 
-    private Integer bookId;
+    private Long customerId;
+
+    private Long bookId;
 
     private Integer rating;
 
