@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -19,6 +21,8 @@ import javax.persistence.*;
 @Entity
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Table(name = "M_BOOK")
+@SQLDelete(sql = "UPDATE M_BOOK SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 public class BookDao extends BaseEntity {
 
 
@@ -32,11 +36,15 @@ public class BookDao extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "author", nullable = false)
-    private String author;
+
 
     @Column(name = "description", nullable = false)
     private String description;
+
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private AuthorDao author;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

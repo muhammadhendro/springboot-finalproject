@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 3595678817094961783L;
 
@@ -34,10 +34,14 @@ public class BaseEntity implements Serializable {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @PrePersist
     void onCreate() {
         this.createdAt = LocalDateTime.now();
         if (createdBy == null) createdBy = AppConstant.DEFAULT_SYSTEM;
+        this.isDeleted = Boolean.FALSE;
     }
 
     @PreUpdate

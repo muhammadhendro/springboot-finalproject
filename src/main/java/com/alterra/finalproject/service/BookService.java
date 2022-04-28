@@ -1,14 +1,19 @@
 package com.alterra.finalproject.service;
 
 
+
+
 import com.alterra.finalproject.constant.AppConstant;
+import com.alterra.finalproject.domain.dao.AuthorDao;
 import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dao.CategoryDao;
 import com.alterra.finalproject.domain.dto.BookDto;
+import com.alterra.finalproject.repository.AuthorRepository;
 import com.alterra.finalproject.repository.BookRepository;
 import com.alterra.finalproject.repository.CategoryRepository;
 import com.alterra.finalproject.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,61 +32,110 @@ public class BookService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private ModelMapper mapper;
+
     public ResponseEntity<Object> getAllBook() {
-        List<BookDao> daoList = bookRepository.findAll();
-        return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
-    }
+        log.info("Executing get all book.");
+        try{
+            List<BookDao> daoList = bookRepository.findAll();
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when get all book. Error: {}", e.getMessage());
+            log.trace("Get error when get all book. ", e);
+            throw e;
+        }
+          }
 
     public ResponseEntity<Object> getBookById(Long id) {
-        Optional<BookDao> bookDaoOptional = bookRepository.findById(id);
-        if(bookDaoOptional.isEmpty()) {
-            return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+        log.info("Executing get book by id: {} ", id);
+        try {
+            Optional<BookDao> bookDaoOptional = bookRepository.findById(id);
+            if(bookDaoOptional.isEmpty()) {
+                log.info("Book id: {} not found", id);
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            log.info("Executing get book by id success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, bookDaoOptional, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when get book by id. Error: {}", e.getMessage());
+            log.trace("Get error when get book by id. ", e);
+            throw e;
         }
-        return ResponseUtil.build(AppConstant.Message.SUCCESS, bookDaoOptional, HttpStatus.OK);
-
     }
 
     public ResponseEntity<Object> addBook(BookDto request) {
+        log.info("Executing add book with request: {}", request);
+        try{
+            log.info("Get category by id: {}", request.getCategoryId());
+            Optional<CategoryDao> categoryDao = categoryRepository.findById(request.getCategoryId());
+            if (categoryDao.isEmpty()) {
+                log.info("Category [{}] not found", request.getCategoryId());
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            log.info("Get author by id: {}", request.getAuthorId());
+            Optional<AuthorDao> authorDao = authorRepository.findById(request.getAuthorId());
+            if (authorDao.isEmpty()) {
+                log.info("Author [{}] not found", request.getAuthorId());
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            BookDao bookDao = mapper.map(request, BookDao.class);
+            bookDao.setCategory(categoryDao.get());
+            bookDao.setAuthor(authorDao.get());
+            bookDao = bookRepository.save(bookDao);
+            log.info("Executing add book success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
 
-        Optional<CategoryDao> categoryDao = categoryRepository.findById(request.getCategoryId());
-
-        BookDao bookDao = BookDao.builder()
-                .title(request.getTitle())
-                .author(request.getAuthor())
-                .description(request.getDescription())
-                .category(categoryDao.orElse(null))
-                .publishDate(request.getPublishDate())
-                .price(request.getPrice())
-                .build();
-        bookRepository.save(bookDao);
-        return ResponseUtil.build(AppConstant.Message.SUCCESS, bookDao, HttpStatus.OK);
-    }
+        } catch (Exception e) {
+            log.error("Happened error when add book. Error: {}", e.getMessage());
+            log.trace("Get error when add book. ", e);
+            throw e;   }
+        }
 
     public ResponseEntity<Object> deleteBook(Long id) {
-        bookRepository.deleteById(id);
-        return ResponseUtil.build(AppConstant.Message.SUCCESS, null, HttpStatus.OK);
+        log.info("Executing delete book id: {}", id);
+        try{
+            Optional<BookDao> bookDaoOptional =bookRepository.findById(id);
+            if(bookDaoOptional.isEmpty()) {
+                log.info("Book {} not found", id);
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            bookRepository.deleteById(id);
+            log.info("Executing delete book success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, null, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when delete book. Error: {}", e.getMessage());
+            log.trace("Get error when delete book. ", e);
+            throw e;
+        }
 
     }
 
     public ResponseEntity<Object> updateBook(Long id, BookDto request) {
-        Optional<BookDao>bookDaoOptional= bookRepository.findById(id);
-        Optional<CategoryDao> categoryDao = categoryRepository.findById(request.getCategoryId());
-
-        if(bookDaoOptional.isEmpty()) {
-            return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+        log.info("Executing update book with request: {}", request);
+        try {
+            Optional<BookDao>bookDaoOptional= bookRepository.findById(id);
+            if(bookDaoOptional.isEmpty()) {
+                log.info("Book {} not found", id);
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            bookDaoOptional.ifPresent(res -> {
+                res.setTitle(request.getTitle());
+                res.setDescription(request.getDescription());
+                res.setPublishDate(request.getPublishDate());
+                res.setPrice(request.getPrice());
+                bookRepository.save(res);
+            });
+            log.info("Executing update book success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDaoOptional, BookDto.class), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when update book. Error: {}", e.getMessage());
+            log.trace("Get error when update book. ", e);
+            throw e;
         }
-
-        bookDaoOptional.ifPresent(res -> {
-            res.setTitle(request.getTitle());
-            res.setAuthor(request.getAuthor());
-            res.setDescription(request.getDescription());
-            res.setCategory(categoryDao.orElse(null));
-            res.setPublishDate(request.getPublishDate());
-            res.setPrice(request.getPrice());
-            bookRepository.save(res);
-        });
-        return ResponseUtil.build(AppConstant.Message.SUCCESS, bookDaoOptional.get(), HttpStatus.OK);
-
 
 
 
