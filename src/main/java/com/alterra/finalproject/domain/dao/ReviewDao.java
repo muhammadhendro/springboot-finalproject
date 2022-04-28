@@ -26,11 +26,11 @@ public class ReviewDao {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private CustomerDao customer;
+    private CustomerDao customers;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private BookDao book;
+    private BookDao books;
 
 
 

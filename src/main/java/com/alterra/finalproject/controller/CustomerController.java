@@ -24,17 +24,17 @@ public class CustomerController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<Object> addCategory(@RequestBody CustomerDto request) {
+    public ResponseEntity<Object> addCustomer(@RequestBody CustomerDto request) {
         return customerService.addCustomer(request);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Object> deleteCategory(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> deleteCustomer(@PathVariable(value = "id") Long id) {
         return customerService.deleteCustomer(id);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> updateCategory(@PathVariable(value = "id") Long id, @RequestBody CustomerDto request) {
+    public ResponseEntity<Object> updateCustomer(@PathVariable(value = "id") Long id, @RequestBody CustomerDto request) {
         return customerService.updateCustomer(id, request);
     }
 }

@@ -136,9 +136,6 @@ public class BookService {
             log.trace("Get error when update book. ", e);
             throw e;
         }
-
-
-
     }
 
 

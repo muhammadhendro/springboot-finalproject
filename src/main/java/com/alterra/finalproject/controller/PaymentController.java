@@ -23,17 +23,17 @@ public class PaymentController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<Object> addCategory(@RequestBody PaymentDto request) {
+    public ResponseEntity<Object> addPayment(@RequestBody PaymentDto request) {
         return paymentService.addPayment(request);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Object> deleteCategory(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> deletePayment(@PathVariable(value = "id") Long id) {
         return paymentService.deletePayment(id);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> updateCategory(@PathVariable(value = "id") Long id, @RequestBody PaymentDto request) {
+    public ResponseEntity<Object> updatePayment(@PathVariable(value = "id") Long id, @RequestBody PaymentDto request) {
         return paymentService.updatePayment(id, request);
     }
 }

@@ -28,14 +28,12 @@ public class BookController {
     }
 
     @PostMapping(value = "")
-
     public ResponseEntity<Object> addBook(@RequestBody BookDto request) {
         try{
             return bookService.addBook(request);
         } catch (Exception e) {
             throw e;
         }
-
     }
 
     @DeleteMapping(value = "/{id}")
