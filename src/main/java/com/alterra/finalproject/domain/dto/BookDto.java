@@ -5,6 +5,7 @@ import com.alterra.finalproject.domain.dao.CategoryDao;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,10 +26,10 @@ public class BookDto implements Serializable {
 
     private Long id;
 
+    @ApiModelProperty(notes = "Title book", example = "Komik Naruto")
     private String title;
 
-
-
+    @ApiModelProperty(notes = "Description book", example = "Komik ini adalah")
     private String description;
 
     private Long authorId;
@@ -39,7 +40,9 @@ public class BookDto implements Serializable {
 //
 //    private CategoryDto category;
 
+    @ApiModelProperty(notes = "Year publish", example = "2020")
     private String publishDate;
 
+    @ApiModelProperty(notes = "price")
     private Integer price;
 }

@@ -4,6 +4,7 @@ package com.alterra.finalproject.domain.dto;
 import com.alterra.finalproject.domain.dao.BookDao;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +29,10 @@ public class ReviewDto implements Serializable {
 
     private Long bookId;
 
+
+    @ApiModelProperty(notes = "Rating book", example = "1-100")
     private Integer rating;
 
+    @ApiModelProperty(notes = "Review book", example = "Its good and cool")
     private String review;
 }
