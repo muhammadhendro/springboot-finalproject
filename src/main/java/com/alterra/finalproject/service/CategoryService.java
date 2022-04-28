@@ -1,6 +1,7 @@
 package com.alterra.finalproject.service;
 
 import com.alterra.finalproject.constant.AppConstant;
+import com.alterra.finalproject.domain.dao.AuthorDao;
 import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dao.CategoryDao;
 import com.alterra.finalproject.domain.dao.CustomerDao;
@@ -40,6 +41,22 @@ public class CategoryService {
             throw e;
         }  }
 
+    public ResponseEntity<Object> getCategoryById(Long id) {
+        log.info("Executing get category by id: {} ", id);
+        try {
+            Optional<CategoryDao> categoryDao = categoryRepository.findById(id);
+            if(categoryDao.isEmpty()) {
+                log.info("category id: {} not found", id);
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            log.info("Executing get category by id success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, categoryDao, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when get category by id. Error: {}", e.getMessage());
+            log.trace("Get error when get category by id. ", e);
+            throw e;
+        }
+    }
 
     public ResponseEntity<Object> addCategory(CategoryDto request) {
 
