@@ -80,7 +80,7 @@ jobs:
           username: ${{ secrets.EC2_SSH_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            docker stop springboot-helloworld springboot-helloworld-coverage
+            docker stop springboot-finalproject springboot-finalproject-coverage
             docker rmi hendrojun/springboot-finalproject:latest hendrojun/springboot-finalproject-coverage:latest
             docker pull hendrojun/springboot-finalproject:latest
             docker pull hendrojun/springboot-finalproject-coverage:latest
