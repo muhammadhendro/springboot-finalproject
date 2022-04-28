@@ -2,6 +2,7 @@ package com.alterra.finalproject.service;
 
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.AuthorDao;
+import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dao.CategoryDao;
 import com.alterra.finalproject.domain.dao.CustomerDao;
 import com.alterra.finalproject.domain.dto.AuthorDto;
@@ -40,6 +41,22 @@ public class AuthorService {
             throw e;
         }  }
 
+    public ResponseEntity<Object> getAuthorById(Long id) {
+        log.info("Executing get author by id: {} ", id);
+        try {
+            Optional<AuthorDao> authorDao = authorRepository.findById(id);
+            if(authorDao.isEmpty()) {
+                log.info("author id: {} not found", id);
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            log.info("Executing get author by id success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, authorDao, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when get author by id. Error: {}", e.getMessage());
+            log.trace("Get error when get author by id. ", e);
+            throw e;
+        }
+    }
 
     public ResponseEntity<Object> addAuthor(AuthorDto request) {
         log.info("Executing add author with request: {}", request);
