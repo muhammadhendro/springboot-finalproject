@@ -4,6 +4,7 @@ public class AppConstant {
 
     private AppConstant(){}
 
+    public static final String DEFAULT_SYSTEM = "SYSTEM";
     public static class Message {
 
         private Message(){}
