@@ -70,7 +70,7 @@ class BookServiceTest {
                 .id(1L)
                 .categoryId(1L)
                 .authorId(1L)
-                .title("New Product")
+                .title("New Book")
                 .build();
 
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(categoryDao));
@@ -86,12 +86,12 @@ class BookServiceTest {
 
         ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
 
-        BookDto productDtoResponse = (BookDto) Objects.requireNonNull(apiResponse).getData();
+        BookDto bookDto1 = (BookDto) Objects.requireNonNull(apiResponse).getData();
 
         assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
         assertEquals(AppConstant.Message.SUCCESS, Objects.requireNonNull(apiResponse).getMessage());
-        assertEquals(bookDto.getTitle(), productDtoResponse.getTitle());
-        assertEquals(bookDto.getCategoryId(), productDtoResponse.getCategoryId());
+        assertEquals(bookDto.getTitle(), bookDto1.getTitle());
+        assertEquals(bookDto.getCategoryId(), bookDto1.getCategoryId());
 
     }
 
@@ -256,7 +256,7 @@ class BookServiceTest {
                 .id(1L)
                 .categoryId(1L)
                 .authorId(1L)
-                .title("New Product")
+                .title("New Book")
                 .build();
 
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(bookDao));
