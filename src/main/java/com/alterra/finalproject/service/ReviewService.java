@@ -70,7 +70,7 @@ public class ReviewService {
             log.info("Get customer by id: {}", request.getCustomerId());
             Optional<CustomerDao> customerDao = customerRepository.findById(request.getCustomerId());
             if (customerDao.isEmpty()) {
-                log.info("Category [{}] not found", request.getCustomerId());
+                log.info("customer [{}] not found", request.getCustomerId());
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
             log.info("Get book by id: {}", request.getBookId());
