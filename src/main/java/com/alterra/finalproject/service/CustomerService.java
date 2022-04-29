@@ -2,6 +2,7 @@ package com.alterra.finalproject.service;
 
 
 import com.alterra.finalproject.constant.AppConstant;
+import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dao.CustomerDao;
 import com.alterra.finalproject.domain.dao.PaymentDao;
 import com.alterra.finalproject.domain.dto.CustomerDto;
@@ -36,6 +37,23 @@ public class CustomerService {
         } catch (Exception e) {
             log.error("Happened error when get all customer. Error: {}", e.getMessage());
             log.trace("Get error when get all customer. ", e);
+            throw e;
+        }
+    }
+
+    public ResponseEntity<Object> getCustomerById(Long id) {
+        log.info("Executing get customer by id: {} ", id);
+        try {
+            Optional<CustomerDao> customerDao = customerRepository.findById(id);
+            if(customerDao.isEmpty()) {
+                log.info("customer id: {} not found", id);
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            log.info("Executing get customer by id success");
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, customerDao, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when get customer by id. Error: {}", e.getMessage());
+            log.trace("Get error when get customer by id. ", e);
             throw e;
         }
     }
