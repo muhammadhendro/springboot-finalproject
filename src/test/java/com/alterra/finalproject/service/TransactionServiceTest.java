@@ -168,7 +168,7 @@ class TransactionServiceTest {
     }
 
     @Test
-    void addBookException_Test() {
+    void addTransactionException_Test() {
         when(customerRepository.findById(anyLong())).thenThrow(NullPointerException.class);
         assertThrows(Exception.class, () -> transactionService.addTransaction(TransactionDto.builder()
                 .id(1L)
@@ -177,8 +177,6 @@ class TransactionServiceTest {
                 .paymentId(1L)
                 .status("paid")
                 .build()));
-
-
     }
 
     @Test
@@ -340,7 +338,7 @@ class TransactionServiceTest {
     }
 
     @Test
-    void updateBookException_Test() {
+    void updateTransactionException_Test() {
         when(transactionRepository.findById(anyLong())).thenThrow(NullPointerException.class);
         assertThrows(Exception.class, () -> transactionService.updateTransaction(anyLong(), TransactionDto.builder()
                 .id(1L)
