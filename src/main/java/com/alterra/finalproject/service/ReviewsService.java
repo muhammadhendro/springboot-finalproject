@@ -3,11 +3,9 @@ package com.alterra.finalproject.service;
 
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.*;
-import com.alterra.finalproject.domain.dto.BookDto;
 import com.alterra.finalproject.domain.dto.ReviewDto;
-import com.alterra.finalproject.repository.BookRepository;
-import com.alterra.finalproject.repository.CustomerRepository;
-import com.alterra.finalproject.repository.ReviewRepository;
+import com.alterra.finalproject.domain.dto.ReviewsDto;
+import com.alterra.finalproject.repository.ReviewsRepository;
 import com.alterra.finalproject.repository.TransactionRepository;
 import com.alterra.finalproject.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +20,10 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class ReviewService {
+public class ReviewsService {
 
     @Autowired
-    private ReviewRepository reviewRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
+    private ReviewsRepository reviewsRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -42,7 +34,7 @@ public class ReviewService {
     public ResponseEntity<Object> getAllReview() {
         log.info("Executing get all review.");
         try{
-            List<ReviewDao> daoList = reviewRepository.findAll();
+            List<ReviewsDao> daoList = reviewsRepository.findAll();
             return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when get all review. Error: {}", e.getMessage());
@@ -54,13 +46,13 @@ public class ReviewService {
     public ResponseEntity<Object> getReviewById(Long id) {
         log.info("Executing get review by id: {} ", id);
         try {
-            Optional<ReviewDao> reviewDao = reviewRepository.findById(id);
-            if(reviewDao.isEmpty()) {
+            Optional<ReviewsDao> reviewsDao = reviewsRepository.findById(id);
+            if(reviewsDao.isEmpty()) {
                 log.info("review id: {} not found", id);
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
             log.info("Executing get review by id success");
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, reviewDao, HttpStatus.OK);
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, reviewsDao, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when get review by id. Error: {}", e.getMessage());
             log.trace("Get error when get review by id. ", e);
@@ -68,32 +60,30 @@ public class ReviewService {
         }
     }
 
-    public ResponseEntity<Object> addReview(ReviewDto request) {
+    public ResponseEntity<Object> addReview(ReviewsDto request) {
         log.info("Executing add review with request: {}", request);
         try{
-            log.info("Get customer by id: {}", request.getCustomerId());
-            Optional<CustomerDao> customerDao = customerRepository.findById(request.getCustomerId());
-            if (customerDao.isEmpty()) {
-                log.info("customer [{}] not found", request.getCustomerId());
+
+            log.info("Get transaction by id: {}", request.getTransactionId());
+            Optional<TransactionDao> transactionDao = transactionRepository.findById(request.getTransactionId());
+            if (transactionDao.isEmpty()) {
+                log.info("transaction [{}] not found", request.getTransactionId());
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
-            log.info("Get book by id: {}", request.getBookId());
-            Optional<BookDao> bookDao = bookRepository.findById(request.getBookId());
-            if (bookDao.isEmpty()) {
-                log.info("book [{}] not found", request.getBookId());
-                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            if (!transactionDao.get().getStatus().equals("paid")) {
+                log.info("transaction [{}] not paid", request.getTransactionId());
+                return ResponseUtil.build(AppConstant.Message.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            ReviewDao reviewDao = ReviewDao.builder()
-                    .customers(customerDao.get())
-                    .books(bookDao.get())
+            ReviewsDao reviewsDao = ReviewsDao.builder()
+                    .transaction(transactionDao.get())
                     .rating(request.getRating())
                     .review(request.getReview())
                     .build();
 //            reviewDao.setBooks(bookDao.get());
 //            reviewDao.setCustomers(customerDao.get());
-            reviewDao = reviewRepository.save(reviewDao);
+            reviewsDao = reviewsRepository.save(reviewsDao);
             log.info("Executing add review success");
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(reviewDao, ReviewDto.class), HttpStatus.OK);
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(reviewsDao, ReviewsDto.class), HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("Happened error when add review. Error: {}", e.getMessage());
@@ -104,12 +94,12 @@ public class ReviewService {
     public ResponseEntity<Object> deleteReview(Long id) {
         log.info("Executing delete review id: {}", id);
         try{
-            Optional<ReviewDao> reviewDao = reviewRepository.findById(id);
-            if(reviewDao.isEmpty()) {
+            Optional<ReviewsDao> reviewsDao = reviewsRepository.findById(id);
+            if(reviewsDao.isEmpty()) {
                 log.info("review {} not found", id);
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
-            reviewRepository.deleteById(id);
+            reviewsRepository.deleteById(id);
             log.info("Executing delete review success");
             return ResponseUtil.build(AppConstant.Message.SUCCESS, null, HttpStatus.OK);
         } catch (Exception e) {
@@ -119,26 +109,26 @@ public class ReviewService {
         }
 
     }
-    public ResponseEntity<Object> updateReview(Long id, ReviewDto request) {
+
+    public ResponseEntity<Object> updateReview(Long id, ReviewsDto request) {
         log.info("Executing update review with request: {}", request);
         try {
-            Optional<ReviewDao> reviewDao = reviewRepository.findById(id);
-            if(reviewDao.isEmpty()) {
+            Optional<ReviewsDao> reviewsDao = reviewsRepository.findById(id);
+            if(reviewsDao.isEmpty()) {
                 log.info("review {} not found", id);
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
-            reviewDao.ifPresent(res -> {
-               res.setRating(request.getRating());
-               res.setReview(request.getReview());
-               reviewRepository.save(res);
+            reviewsDao.ifPresent(res -> {
+                res.setRating(request.getRating());
+                res.setReview(request.getReview());
+                reviewsRepository.save(res);
             });
             log.info("Executing update review success");
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(reviewDao, ReviewDto.class), HttpStatus.OK);
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(reviewsDao, ReviewsDto.class), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when update review. Error: {}", e.getMessage());
             log.trace("Get error when update review. ", e);
             throw e;
         }
     }
-
 }
