@@ -2,6 +2,7 @@ package com.alterra.finalproject.controller;
 
 import com.alterra.finalproject.domain.dto.CustomerDto;
 import com.alterra.finalproject.domain.dto.TransactionDetailDto;
+import com.alterra.finalproject.domain.dto.TransactionDto;
 import com.alterra.finalproject.service.TransactionDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,9 +21,23 @@ public class TransactionDetailController {
         return transactionDetailService.getAllTransactionDetail();
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Object> getById(@PathVariable(value = "id") Long id){
+        return transactionDetailService.getTransactionDetailById(id);
+    }
 
     @PostMapping(value = "")
     public ResponseEntity<Object> addTransactionDetail(@RequestBody TransactionDetailDto request) {
         return transactionDetailService.addTransactionDetail(request);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Object> deleteReview(@PathVariable(value = "id") Long id) {
+        return transactionDetailService.deleteTransactionDetail(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Object> updateReview(@PathVariable(value = "id") Long id, @RequestBody TransactionDetailDto request) {
+        return transactionDetailService.updateTransactionDetail(id, request);
     }
 }
