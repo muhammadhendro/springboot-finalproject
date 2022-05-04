@@ -7,7 +7,10 @@ import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.AuthorDao;
 import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dao.CategoryDao;
+import com.alterra.finalproject.domain.dto.AuthorDto;
 import com.alterra.finalproject.domain.dto.BookDto;
+import com.alterra.finalproject.domain.dto.BookDtoResponse;
+import com.alterra.finalproject.domain.dto.CategoryDto;
 import com.alterra.finalproject.repository.AuthorRepository;
 import com.alterra.finalproject.repository.BookRepository;
 import com.alterra.finalproject.repository.CategoryRepository;
@@ -19,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +47,19 @@ public class BookService {
         log.info("Executing get all book.");
         try{
             List<BookDao> daoList = bookRepository.findAll();
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
+            List<BookDtoResponse> list = new ArrayList<>();
+            for (BookDao dao : daoList) {
+                list.add(BookDtoResponse.builder()
+                        .id(dao.getId())
+                                .title(dao.getTitle())
+                                .description(dao.getDescription())
+                                .author(AuthorDao.builder().id(dao.getAuthor().getId()).name(dao.getAuthor().getName()).build())
+                                .category(CategoryDao.builder().id(dao.getCategory().getId()).categoryName(dao.getCategory().getCategoryName()).build())
+                                .publishDate(dao.getPublishDate())
+                                .price(dao.getPrice())
+                        .build());
+            }
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, list, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when get all book. Error: {}", e.getMessage());
             log.trace("Get error when get all book. ", e);
