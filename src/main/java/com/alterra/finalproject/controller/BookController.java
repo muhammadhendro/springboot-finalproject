@@ -41,6 +41,13 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
+
+    @GetMapping(value = "/search")
+    public ResponseEntity<Object> getByTitle(@RequestParam(value = "title") String title){
+        return bookService.searchBookByTitle(title);
+    }
+
+
     @ApiOperation(value = "Add new book",  response = BookDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success add new book"),

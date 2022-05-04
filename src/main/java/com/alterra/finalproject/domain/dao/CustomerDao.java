@@ -31,7 +31,5 @@ public class CustomerDao {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customers")
-    private List<ReviewDao> reviews;
+
 }

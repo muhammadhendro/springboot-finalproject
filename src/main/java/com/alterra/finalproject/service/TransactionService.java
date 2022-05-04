@@ -3,8 +3,6 @@ package com.alterra.finalproject.service;
 
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.*;
-import com.alterra.finalproject.domain.dto.BookDto;
-import com.alterra.finalproject.domain.dto.ReviewDto;
 import com.alterra.finalproject.domain.dto.TransactionDto;
 import com.alterra.finalproject.repository.BookRepository;
 import com.alterra.finalproject.repository.CustomerRepository;
