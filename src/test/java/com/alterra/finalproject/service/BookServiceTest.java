@@ -7,6 +7,7 @@ import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dao.CategoryDao;
 import com.alterra.finalproject.domain.dto.AuthorDto;
 import com.alterra.finalproject.domain.dto.BookDto;
+import com.alterra.finalproject.domain.dto.BookDtoResponse;
 import com.alterra.finalproject.domain.dto.CategoryDto;
 import com.alterra.finalproject.repository.AuthorRepository;
 import com.alterra.finalproject.repository.BookRepository;
@@ -143,12 +144,25 @@ class BookServiceTest {
     @Test
     void getAllBookSuccess_Test() {
 
+        AuthorDao authorDao = AuthorDao.builder()
+                .name("masashi")
+                .build();
+
+        CategoryDao categoryDao = CategoryDao.builder()
+                .categoryName("komik")
+                .build();
+
         BookDao bookDao = BookDao.builder()
                 .id(1L)
                 .title("naruto")
+                .author(authorDao)
+                .category(categoryDao)
                 .build();
+
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(categoryDao));
+        when(authorRepository.findById(anyLong())).thenReturn(Optional.of(authorDao));
         when(bookRepository.findAll()).thenReturn(List.of(bookDao));
-        when(modelMapper.map(any(), eq(BookDto.class))).thenReturn(BookDto.builder()
+        when(modelMapper.map(any(), eq(BookDtoResponse.class))).thenReturn(BookDtoResponse.builder()
                 .id(1L)
                 .title("naruto")
                 .build());
