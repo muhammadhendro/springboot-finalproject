@@ -3,7 +3,6 @@ package com.alterra.finalproject.service;
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.common.ApiResponse;
 import com.alterra.finalproject.domain.dao.*;
-import com.alterra.finalproject.domain.dto.ReviewDto;
 import com.alterra.finalproject.domain.dto.ReviewsDto;
 import com.alterra.finalproject.repository.ReviewsRepository;
 import com.alterra.finalproject.repository.TransactionRepository;

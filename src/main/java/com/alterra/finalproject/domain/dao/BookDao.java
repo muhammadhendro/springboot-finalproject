@@ -55,9 +55,7 @@ public class BookDao extends BaseEntity {
     @Column(name = "price", nullable = false)
     private Integer price;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
-    private List<ReviewDao> reviews;
+
 
 
 

@@ -1,6 +1,5 @@
 package com.alterra.finalproject.controller;
 
-import com.alterra.finalproject.domain.dto.ReviewDto;
 import com.alterra.finalproject.domain.dto.ReviewsDto;
 import com.alterra.finalproject.service.ReviewsService;
 import lombok.extern.slf4j.Slf4j;

@@ -67,6 +67,19 @@ public class BookService {
         }
     }
 
+    public ResponseEntity<Object> searchBookByTitle(String title) {
+        try {
+            log.info("Executing search book by title: [{}]", title);
+            List<BookDao> bookDao = bookRepository.searchByTitleLike(title);
+
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when search book by title. Error: {}", e.getMessage());
+            log.trace("Get error when search book by title. ", e);
+            throw e;
+        }
+    }
+
     public ResponseEntity<Object> addBook(BookDto request) {
         log.info("Executing add book with request: {}", request);
         try{
