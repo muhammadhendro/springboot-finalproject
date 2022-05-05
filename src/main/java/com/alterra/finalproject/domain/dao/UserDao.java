@@ -14,6 +14,9 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "M_USER")
 public class UserDao  implements UserDetails {
@@ -32,6 +35,8 @@ public class UserDao  implements UserDetails {
 
     @Column(columnDefinition = "boolean default true")
     private boolean active = true;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
