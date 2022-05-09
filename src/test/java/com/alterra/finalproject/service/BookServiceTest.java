@@ -12,6 +12,7 @@ import com.alterra.finalproject.domain.dto.CategoryDto;
 import com.alterra.finalproject.repository.AuthorRepository;
 import com.alterra.finalproject.repository.BookRepository;
 import com.alterra.finalproject.repository.CategoryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
+@Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = BookService.class)
 class BookServiceTest {
@@ -169,7 +171,7 @@ class BookServiceTest {
         ResponseEntity<Object> responseEntity = bookService.getAllBook();
 
         ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
-
+        log.info("cek {}", apiResponse);
         List<BookDto> bookDtos = (List<BookDto>) apiResponse.getData();
 
         assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
@@ -224,6 +226,32 @@ class BookServiceTest {
     void getBookByIdException_Test() {
         when(bookRepository.findById(anyLong())).thenThrow(NullPointerException.class);
         assertThrows(Exception.class, () -> bookService.getBookById(1L));
+    }
+
+    @Test
+    void getBookByTitleSuccess_Test(){
+        BookDao bookDao = BookDao.builder()
+                .id(1L)
+                .title("naruto")
+                .build();
+        when(bookRepository.findByTitle(any())).thenReturn(bookDao);
+        when(modelMapper.map(any(), eq(BookDto.class))).thenReturn(BookDto.builder()
+                .id(1L)
+                .title("naruto")
+                .build());
+        ResponseEntity<Object> responseEntity = bookService.getBookByTitle("naruto");
+
+        ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
+
+        assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
+        assertEquals(AppConstant.Message.SUCCESS, Objects.requireNonNull(apiResponse).getMessage());
+
+    }
+
+    @Test
+    void getBookByTitleException_Test() {
+        when(bookRepository.findByTitle(any())).thenThrow(NullPointerException.class);
+        assertThrows(Exception.class, () -> bookService.getBookByTitle("naruto"));
     }
 
     @Test

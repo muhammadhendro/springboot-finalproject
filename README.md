@@ -6,7 +6,7 @@
 
 [Code Coverage](http://54.164.39.137:8000)
 
-[Swagger UI]()
+[Swagger UI](http://54.164.39.137/api/swagger-ui/index.html)
 
 
 

@@ -11,12 +11,13 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<BookDao, Long> {
 
+    List<BookDao> findAllByCategoryCategoryName(String categoryName);
 
-//    List<BookDao> findAllByCategoryId(Long categoryId);
-//
-//    List<BookDao> findAllByCategoryName(String categoryName);
-//
+    @Query(value = "SELECT b FROM BookDao b WHERE b.title like concat('%', ?1, '%')")
+    List<BookDao> findByTitleContainingIgnoreCase(String title);
 
-    @Query(value = "SELECT b FROM BookDao b WHERE b.title LIKE %:title%")
-    List<BookDao> searchByTitleLike(@Param("title") String title);
+    BookDao findByTitle(String title);
+
+  //  BookDao findByCategoryName(String categoryName);
+
 }

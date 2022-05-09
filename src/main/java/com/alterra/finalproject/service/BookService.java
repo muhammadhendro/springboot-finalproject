@@ -87,9 +87,48 @@ public class BookService {
     public ResponseEntity<Object> searchBookByTitle(String title) {
         try {
             log.info("Executing search book by title: [{}]", title);
-            List<BookDao> bookDao = bookRepository.searchByTitleLike(title);
+            List<BookDao> bookDao = bookRepository.findByTitleContainingIgnoreCase(title);
+            if(bookDao.isEmpty()){
+                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.NOT_FOUND);
+
+            }
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when search book by title. Error: {}", e.getMessage());
+            log.trace("Get error when search book by title. ", e);
+            throw e;
+        }
+    }
+
+    public ResponseEntity<Object> getBookByTitle(String title) {
+        try {
+            log.info("Executing search book by title: [{}]", title);
+            BookDao bookDao = bookRepository.findByTitle(title);
 
             return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Happened error when search book by title. Error: {}", e.getMessage());
+            log.trace("Get error when search book by title. ", e);
+            throw e;
+        }
+    }
+
+    public ResponseEntity<Object> getBookByCategoryName(String categoryName) {
+        try {
+            log.info("Executing search book by category: [{}]", categoryName);
+
+            List<BookDao> bookDao = bookRepository.findAllByCategoryCategoryName(categoryName);
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
+
+//            List<BookDao> bookDao;
+//            List<BookDto> bookDtoList = new ArrayList<>();
+//            if (categoryName != null) bookDao = bookRepository.findAllByCategoryCategoryName(categoryName);
+//            else bookDao = bookRepository.findAll();
+//
+//            for (BookDao book : bookDao) {
+//                bookDtoList.add(mapper.map(book, BookDto.class));
+//            }
+
         } catch (Exception e) {
             log.error("Happened error when search book by title. Error: {}", e.getMessage());
             log.trace("Get error when search book by title. ", e);
