@@ -1,4 +1,4 @@
-package com.alterra.finalproject.service;
+package com.alterra.finalproject.config.security;
 
 import com.alterra.finalproject.config.security.JwtTokenProvider;
 import com.alterra.finalproject.domain.dao.UserDao;
@@ -39,6 +39,31 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             req.getUsername(),
                             req.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtTokenProvider.generateToken(authentication);
+            TokenResponse tokenResponse = new TokenResponse();
+            tokenResponse.setToken(jwt);
+            return tokenResponse;
+
+        } catch (BadCredentialsException e) {
+
+            log.error("Bad credential", e);
+            throw new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
+
+        }
+    }
+
+    public TokenResponse generateToken2(String username, String password) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                           username, password
+
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);

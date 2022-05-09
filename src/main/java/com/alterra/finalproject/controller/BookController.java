@@ -3,6 +3,8 @@ package com.alterra.finalproject.controller;
 import com.alterra.finalproject.domain.dto.AuthorDto;
 import com.alterra.finalproject.domain.dto.BookDto;
 import com.alterra.finalproject.service.BookService;
+import com.alterra.finalproject.service.RestConsumerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -23,6 +25,9 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private RestConsumerService restConsumerService;
+
     @ApiOperation(value = "Get all books",  response = BookDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success get list book"),
@@ -42,9 +47,30 @@ public class BookController {
     }
 
 
-    @GetMapping(value = "/search")
-    public ResponseEntity<Object> getByTitle(@RequestParam(value = "title") String title){
+//    @GetMapping(value = "/search")
+//    public ResponseEntity<Object> getByTitle(@RequestParam(value = "title") String title){
+//        return bookService.searchBookByTitle(title);
+//    }
+
+    @GetMapping(value = "/search/{title}")
+    public ResponseEntity<Object> searchBookByTitle(@PathVariable(value = "title") String title){
         return bookService.searchBookByTitle(title);
+    }
+
+    @GetMapping(value = "/category/{categoryName}")
+    public ResponseEntity<Object> searchBookByCategoryName(@PathVariable(value = "categoryName") String categoryName){
+        return bookService.getBookByCategoryName(categoryName);
+    }
+
+    @GetMapping(value = "/find/{title}")
+    public ResponseEntity<Object> findBookByTitle(@PathVariable(value = "title") String title){
+        return bookService.getBookByTitle(title);
+    }
+
+    @GetMapping(value = "/rest/{title}")
+    public ResponseEntity<Object> searchBookRestConsumer(@PathVariable(value = "title") String title) {
+        String a = title;
+        return restConsumerService.getBookRestConsumer(a);
     }
 
 
