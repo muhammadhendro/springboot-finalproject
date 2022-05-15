@@ -4,6 +4,8 @@ import com.alterra.finalproject.config.security.SecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,6 +48,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 .antMatchers("/v1/auth/**").permitAll()
+                .antMatchers("/hello").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.POST, "/v1/book").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.DELETE, "/v1/book").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.PUT, "/v1/book").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.POST, "/v1/category").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.DELETE, "/v1/category").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.PUT, "/v1/category").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.POST, "/v1/author").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.DELETE, "/v1/author").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.PUT, "/v1/author").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.POST, "/v1/payment").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.DELETE, "/v1/payment").hasAuthority("ADMIN")
+                .antMatchers( HttpMethod.PUT, "/v1/payment").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
         // remove session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

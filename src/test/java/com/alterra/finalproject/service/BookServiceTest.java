@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -352,8 +353,77 @@ class BookServiceTest {
                 .publishDate("2000")
                 .price(2000)
                 .build()));
+    }
 
+    @Test
+    void searchBookByTitleSuccess_Test() {
+        BookDao bookDao = BookDao.builder()
+                .id(1L)
+                .title("naruto")
+                .build();
+        when(bookRepository.findAllByTitle(any())).thenReturn(List.of(bookDao));
+        when(modelMapper.map(any(), eq(BookDto.class))).thenReturn(BookDto.builder()
+                .id(1L)
+                .title("naruto")
+                .build());
+        ResponseEntity<Object> responseEntity = bookService.searchBookByTitle("naruto");
 
+        ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
 
+        assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
+        assertEquals(AppConstant.Message.SUCCESS, Objects.requireNonNull(apiResponse).getMessage());
+
+    }
+
+    @Test
+    void searchBookByTitleNotFound_Test() {
+       when(bookRepository.findAllByTitle(any())).thenReturn(List.of());
+
+        ResponseEntity<Object> responseEntity = bookService.searchBookByTitle("naruto");
+
+        ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
+//        assertEquals(HttpStatus.BAD_REQUEST.value(), responseEntity.getStatusCodeValue());
+        assertEquals(AppConstant.Message.NOT_FOUND, Objects.requireNonNull(apiResponse).getMessage());
+
+    }
+
+    @Test
+    void searchBookByTitleException_Test() {
+        when(bookRepository.findAllByTitle(any())).thenThrow(NullPointerException.class);
+        assertThrows(Exception.class, () -> bookService.searchBookByTitle("naruto"));
+    }
+
+    @Test
+    void searchBookByCategorySuccess_Test() {
+        BookDao bookDao = BookDao.builder()
+                .id(1L)
+                .title("naruto")
+                .build();
+        when(bookRepository.findBookDaoByCategoryCategoryName(any())).thenReturn(List.of(bookDao));
+        when(modelMapper.map(any(), eq(BookDto.class))).thenReturn(BookDto.builder()
+                .id(1L)
+                .title("naruto")
+                .build());
+        ResponseEntity<Object> responseEntity = bookService.getBookByCategoryName("Komik");
+
+        ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
+
+        assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
+        assertEquals(AppConstant.Message.SUCCESS, Objects.requireNonNull(apiResponse).getMessage());
+
+    }
+
+    @Test
+    void searchBookByCategoryNotFound_Test() {
+        when(bookRepository.findBookDaoByCategoryCategoryName(any())).thenReturn(List.of());
+        ResponseEntity<Object> responseEntity = bookService.getBookByCategoryName("Komik");
+        ApiResponse apiResponse = (ApiResponse) responseEntity.getBody();
+        assertEquals(AppConstant.Message.NOT_FOUND, Objects.requireNonNull(apiResponse).getMessage());
+    }
+
+    @Test
+    void searchBookByCategoryException_Test() {
+        when(bookRepository.findBookDaoByCategoryCategoryName(any())).thenThrow(NullPointerException.class);
+        assertThrows(Exception.class, () -> bookService.getBookByCategoryName("Komik"));
     }
 }

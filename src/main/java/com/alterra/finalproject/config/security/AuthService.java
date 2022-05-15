@@ -29,6 +29,7 @@ public class AuthService {
     public UserDao register(UsernamePassword req) {
         UserDao user = new UserDao();
         user.setUsername(req.getUsername());
+        user.setRoles(req.getRoles());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         return userRepository.save(user);
     }
@@ -39,6 +40,7 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             req.getUsername(),
                             req.getPassword()
+
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
