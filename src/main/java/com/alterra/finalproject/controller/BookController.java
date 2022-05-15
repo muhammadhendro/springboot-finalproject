@@ -47,13 +47,14 @@ public class BookController {
     }
 
 
-//    @GetMapping(value = "/search")
-//    public ResponseEntity<Object> getByTitle(@RequestParam(value = "title") String title){
+//    @GetMapping(value = "/search/{title}")
+//    public ResponseEntity<Object> searchBookByTitle(@PathVariable(value = "title") String title){
 //        return bookService.searchBookByTitle(title);
 //    }
 
-    @GetMapping(value = "/search/{title}")
-    public ResponseEntity<Object> searchBookByTitle(@PathVariable(value = "title") String title){
+
+    @GetMapping(value = "/search")
+    public ResponseEntity<Object> searchBookByTitle(@RequestParam(value = "title", required = false) String title){
         return bookService.searchBookByTitle(title);
     }
 

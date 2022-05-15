@@ -4,12 +4,14 @@ import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.BookDao;
 import com.alterra.finalproject.domain.dto.BookDto;
 import com.alterra.finalproject.service.BookService;
+import com.alterra.finalproject.service.RestConsumerService;
 import com.alterra.finalproject.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -46,6 +48,9 @@ class BookControllerTest {
 
     @MockBean
     private BookService bookService;
+
+    @MockBean
+    private RestConsumerService restConsumerService;
 
     @Autowired
     private MockMvc mockMvc;

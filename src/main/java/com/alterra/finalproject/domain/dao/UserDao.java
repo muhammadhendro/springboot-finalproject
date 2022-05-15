@@ -8,10 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.*;
 
 @Data
 @Builder
@@ -31,7 +32,7 @@ public class UserDao  implements UserDetails {
 
     private String password;
 
-    private String role;
+    private String roles;
 
     @Column(columnDefinition = "boolean default true")
     private boolean active = true;
@@ -40,7 +41,9 @@ public class UserDao  implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+        list.add(new SimpleGrantedAuthority(roles));
+        return list;
     }
 
     @Override

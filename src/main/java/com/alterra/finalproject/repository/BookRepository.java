@@ -11,10 +11,12 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<BookDao, Long> {
 
-    List<BookDao> findAllByCategoryCategoryName(String categoryName);
+    List<BookDao> findBookDaoByCategoryCategoryName(String categoryName);
+    
+    @Query(value = "SELECT b FROM BookDao b WHERE upper(b.title) LIKE UPPER(CONCAT('%', :title, '%') ) ")
+    List<BookDao> findAllByTitle(@Param("title") String title);
 
-    @Query(value = "SELECT b FROM BookDao b WHERE b.title like concat('%', ?1, '%')")
-    List<BookDao> findByTitleContainingIgnoreCase(String title);
+    //BookDao findAllByTitleContaining(String title);
 
     BookDao findByTitle(String title);
 
