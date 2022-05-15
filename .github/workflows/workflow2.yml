@@ -71,7 +71,7 @@ jobs:
           username: ${{ secrets.EC2_SSH_USERNAME }}
           password: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: .dev.env
-          target: /home/${{ secrets.EC2_SSH_USERNAME }}
+          target: /root
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
