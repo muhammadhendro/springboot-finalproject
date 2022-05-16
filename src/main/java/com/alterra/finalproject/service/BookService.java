@@ -120,14 +120,14 @@ public class BookService {
         try {
             log.info("Executing search book by title: [{}]", title);
             List<BookDao> bookDaos;
-            List<BookDto> bookDtoList = new ArrayList<>();
+            List<BookDtoResponse> bookDtoList = new ArrayList<>();
             bookDaos = bookRepository.findAllByTitle(title);
             if(bookDaos.isEmpty()){
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.NOT_FOUND);
 
             }
             for (BookDao bookDao : bookDaos) {
-                bookDtoList.add(mapper.map(bookDao, BookDto.class));
+                bookDtoList.add(mapper.map(bookDao, BookDtoResponse.class));
             }
             return ResponseUtil.build(AppConstant.Message.SUCCESS, bookDtoList, HttpStatus.OK);
         } catch (Exception e) {
@@ -157,14 +157,14 @@ public class BookService {
             log.info("Executing search book by category: [{}]", categoryName);
 
             List<BookDao> bookDaos;
-            List<BookDto> bookDtoList = new ArrayList<>();
+            List<BookDtoResponse> bookDtoList = new ArrayList<>();
 
             bookDaos = bookRepository.findBookDaoByCategoryCategoryName(categoryName);
             if(bookDaos.isEmpty()){
                 return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.NOT_FOUND);
             }
             for (BookDao bookDao : bookDaos) {
-                bookDtoList.add(mapper.map(bookDao, BookDto.class));
+                bookDtoList.add(mapper.map(bookDao, BookDtoResponse.class));
             }
             return ResponseUtil.build(AppConstant.Message.SUCCESS, bookDtoList, HttpStatus.OK);
         } catch (Exception e) {

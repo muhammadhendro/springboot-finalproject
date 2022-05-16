@@ -66,5 +66,9 @@ public class UserDao  implements UserDetails {
         return this.active;
     }
 
+//    @OneToOne(cascade = CascadeType.ALL, optional = false)
+//    @JoinColumn(name = "customer_id")
+//    @MapsId
+//    private CustomerDao customer;
 
 }

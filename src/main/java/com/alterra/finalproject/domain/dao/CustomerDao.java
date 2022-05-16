@@ -31,5 +31,8 @@ public class CustomerDao {
     @Column(name = "address", nullable = false)
     private String address;
 
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
+//    private UserDao userId;
+
 
 }
