@@ -3,7 +3,7 @@ name: Spring Boot Final Project
 on:
   push:
     branches:
-      - development
+      - master
 
 jobs:
   run_test:

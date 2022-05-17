@@ -84,38 +84,6 @@ public class BookService {
         }
     }
 
-//    public ResponseEntity<Object> searchBookByTitle(String title) {
-//        try {
-//            log.info("Executing search book by title: [{}]", title);
-//            List<BookDao> bookDao = bookRepository.findByTitleContaining(title);
-//            if(bookDao.isEmpty()){
-//                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.NOT_FOUND);
-//
-//            }
-//            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
-//        } catch (Exception e) {
-//            log.error("Happened error when search book by title. Error: {}", e.getMessage());
-//            log.trace("Get error when search book by title. ", e);
-//            throw e;
-//        }
-//    }
-
-//    public ResponseEntity<Object> searchBookByTitle2(String title) {
-//        try {
-//            log.info("Executing search book by title: [{}]", title);
-//            BookDao bookDao = bookRepository.findAllByTitleContaining(title);
-//            if(bookDao == null){
-//                return ResponseUtil.build(AppConstant.Message.NOT_FOUND, null, HttpStatus.NOT_FOUND);
-//
-//            }
-//            return ResponseUtil.build(AppConstant.Message.SUCCESS, mapper.map(bookDao, BookDto.class), HttpStatus.OK);
-//        } catch (Exception e) {
-//            log.error("Happened error when search book by title. Error: {}", e.getMessage());
-//            log.trace("Get error when search book by title. ", e);
-//            throw e;
-//        }
-//    }
-
     public ResponseEntity<Object> searchBookByTitle(String title) {
         try {
             log.info("Executing search book by title: [{}]", title);
