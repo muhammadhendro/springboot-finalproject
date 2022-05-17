@@ -10,7 +10,7 @@ Book Store API adalah Sebuah project aplikasi Restful API menggunakan Java Sprin
 
 ## Endpoint
 
-[Application](http://34.142.247.158/)
+[Application](http://34.142.247.158/api/v1/book)
 
 [Code Coverage](http://34.142.247.158:8000)
 
