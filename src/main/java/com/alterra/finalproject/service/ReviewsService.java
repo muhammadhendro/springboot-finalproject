@@ -4,6 +4,7 @@ package com.alterra.finalproject.service;
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.*;
 import com.alterra.finalproject.domain.dto.ReviewsDto;
+import com.alterra.finalproject.domain.dto.ReviewsDtoResponse;
 import com.alterra.finalproject.repository.ReviewsRepository;
 import com.alterra.finalproject.repository.TransactionRepository;
 import com.alterra.finalproject.util.ResponseUtil;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,11 @@ public class ReviewsService {
         log.info("Executing get all review.");
         try{
             List<ReviewsDao> daoList = reviewsRepository.findAll();
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
+            List<ReviewsDtoResponse> list = new ArrayList<>();
+            for(ReviewsDao dao : daoList){
+                list.add(mapper.map(dao, ReviewsDtoResponse.class));
+            }
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, list, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when get all review. Error: {}", e.getMessage());
             log.trace("Get error when get all review. ", e);

@@ -3,9 +3,7 @@ package com.alterra.finalproject.service;
 
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.*;
-import com.alterra.finalproject.domain.dto.CustomerDto;
-import com.alterra.finalproject.domain.dto.ReviewsDto;
-import com.alterra.finalproject.domain.dto.TransactionDetailDto;
+import com.alterra.finalproject.domain.dto.*;
 import com.alterra.finalproject.repository.TransactionDetailRepository;
 import com.alterra.finalproject.repository.TransactionRepository;
 import com.alterra.finalproject.util.ResponseUtil;
@@ -16,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +35,11 @@ public class TransactionDetailService {
         log.info("Executing get all transaction detail.");
         try{
             List<TransactionDetailDao> daoList = transactionDetailRepository.findAll();
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
+            List<TransactionDetailDtoResponse> list = new ArrayList<>();
+            for(TransactionDetailDao dao : daoList){
+                list.add(modelMapper.map(dao, TransactionDetailDtoResponse.class));
+            }
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, list, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when get all transaction detail. Error: {}", e.getMessage());
             log.trace("Get error when get all transaction detail. ", e);

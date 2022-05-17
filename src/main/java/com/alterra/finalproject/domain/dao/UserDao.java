@@ -1,6 +1,7 @@
 package com.alterra.finalproject.domain.dao;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -66,9 +67,10 @@ public class UserDao  implements UserDetails {
         return this.active;
     }
 
-//    @OneToOne(cascade = CascadeType.ALL, optional = false)
-//    @JoinColumn(name = "customer_id")
-//    @MapsId
+//    @JsonIgnore
+//    @OneToOne(cascade = CascadeType.ALL)
+////    @JoinColumn(name = "customer_id")
+////    @MapsId
 //    private CustomerDao customer;
 
 }

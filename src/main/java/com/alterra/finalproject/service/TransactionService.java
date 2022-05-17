@@ -4,7 +4,9 @@ package com.alterra.finalproject.service;
 import com.alterra.finalproject.constant.AppConstant;
 import com.alterra.finalproject.domain.dao.*;
 import com.alterra.finalproject.domain.dto.BookDto;
+import com.alterra.finalproject.domain.dto.BookDtoResponse;
 import com.alterra.finalproject.domain.dto.TransactionDto;
+import com.alterra.finalproject.domain.dto.TransactionDtoResponse;
 import com.alterra.finalproject.repository.BookRepository;
 import com.alterra.finalproject.repository.CustomerRepository;
 import com.alterra.finalproject.repository.PaymentRepository;
@@ -44,7 +46,11 @@ public class TransactionService {
         log.info("Executing get all transaction.");
         try{
             List<TransactionDao> daoList = transactionRepository.findAll();
-            return ResponseUtil.build(AppConstant.Message.SUCCESS, daoList, HttpStatus.OK);
+            List<TransactionDtoResponse> list = new ArrayList<>();
+            for(TransactionDao dao : daoList) {
+               list.add(modelMapper.map(dao, TransactionDtoResponse.class));
+            }
+            return ResponseUtil.build(AppConstant.Message.SUCCESS, list, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Happened error when get all transaction. Error: {}", e.getMessage());
             log.trace("Get error when get all transaction. ", e);

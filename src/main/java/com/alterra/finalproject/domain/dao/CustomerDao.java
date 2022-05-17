@@ -22,6 +22,7 @@ import java.util.List;
 public class CustomerDao {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -31,8 +32,9 @@ public class CustomerDao {
     @Column(name = "address", nullable = false)
     private String address;
 
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
-//    private UserDao userId;
+//    @OneToOne(mappedBy = "customer")
+//    @JoinColumn(name = "user_id")
+//    private UserDao user;
 
 
 }
